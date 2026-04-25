@@ -47,6 +47,15 @@ extraEnv: {}
 # Use this for anything sensitive (database passwords, S3 keys, etc.).
 extraSecretEnv: {}
 
+# Additional pod annotations (e.g. for reloader).
+podAnnotations: {}
+
+# Extra volumes to attach to the pod.
+extraVolumes: []
+
+# Extra volume mounts for the stalwart container.
+extraVolumeMounts: []
+
 # config.json contents. Rendered verbatim into the ConfigMap.
 # Only the DataStore object belongs here; every other setting lives
 # in the database once the server is bootstrapped.
