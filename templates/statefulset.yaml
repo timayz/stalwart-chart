@@ -32,6 +32,8 @@ spec:
             - "--config"
             - "/etc/stalwart/config.json"
           env:
+            - name: STALWART_HOSTNAME
+              value: {{ include "stalwart.domain" . | quote }}
             {{- if .Values.role }}
             - name: STALWART_ROLE
               value: {{ .Values.role | quote }}
@@ -47,8 +49,6 @@ spec:
               value: {{ .Values.recoveryMode.port | quote }}
             - name: STALWART_RECOVERY_MODE_LOG_LEVEL
               value: {{ .Values.recoveryMode.logLevel | quote }}
-            - name: STALWART_HOSTNAME
-              value: {{ include "stalwart.domain" . | quote }}
             {{- end }}
             {{- range $key, $value := .Values.extraEnv }}
             - name: {{ $key }}
