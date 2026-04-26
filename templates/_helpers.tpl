@@ -11,6 +11,10 @@
 {{- end -}}
 {{- end -}}
 
+{{- define "stalwart.domain" -}}
+{{- printf "mail.%s" .Values.domain -}}
+{{- end -}}
+
 {{- define "stalwart.labels" -}}
 app.kubernetes.io/name: {{ include "stalwart.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}

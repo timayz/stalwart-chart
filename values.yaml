@@ -21,6 +21,9 @@ role: ""
 # push notifications. Leave empty on single-node installs.
 pushShard: ""
 
+# Maps to STALWART_HOSTNAME=mail.example.com. Using for hostname and email domain
+domain: "example.com"
+
 # Recovery / bootstrap administrator credential.
 # Enable this on first install so the operator can sign in without
 # scraping the pod logs for the generated temporary password.
@@ -82,20 +85,6 @@ service:
     http: 80
     https: 443
     mgmt: 8080
-
-# Ingress for the HTTP / HTTPS listeners only. Mail protocols
-# require L4 exposure and are not handled here.
-ingress:
-  enabled: false
-  className: nginx
-  annotations: {}
-  hosts:
-    - host: mail.example.org
-      paths:
-        - path: /
-          pathType: Prefix
-          portName: https
-  tls: []
 
 # Persistent volume for the data directory. Required when the
 # DataStore is a local backend such as RocksDB. Can be disabled

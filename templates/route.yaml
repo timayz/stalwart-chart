@@ -1,0 +1,149 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: stalwart
+  namespace: stalwart
+spec:
+  parentRefs:
+    - name: envoy
+      namespace: envoy-gateway-system
+  # Hostnames matching HTTP header.
+  hostnames:
+    - {{ include "stalwart.domain" . | quote }}
+  # List of rules and filters applied.
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - name: stalwart-stalwart
+          group: ""
+          port: 8080
+          weight: 1
+---
+apiVersion: gateway.networking.k8s.io/v1alpha2
+kind: TCPRoute
+metadata:
+  name: stalwart-smtp
+  namespace: stalwart
+spec:
+  parentRefs:
+    - name: envoy
+      namespace: envoy-gateway-system
+      sectionName: smtp
+  rules:
+    - backendRefs:
+        - name: stalwart-stalwart
+          port: 25
+---
+apiVersion: gateway.networking.k8s.io/v1alpha2
+kind: TCPRoute
+metadata:
+  name: stalwart-submission
+  namespace: stalwart
+spec:
+  parentRefs:
+    - name: envoy
+      namespace: envoy-gateway-system
+      sectionName: submission
+  rules:
+    - backendRefs:
+        - name: stalwart-stalwart
+          port: 587
+---
+apiVersion: gateway.networking.k8s.io/v1alpha2
+kind: TCPRoute
+metadata:
+  name: stalwart-imap
+  namespace: stalwart
+spec:
+  parentRefs:
+    - name: envoy
+      namespace: envoy-gateway-system
+      sectionName: imap
+  rules:
+    - backendRefs:
+        - name: stalwart-stalwart
+          port: 143
+---
+apiVersion: gateway.networking.k8s.io/v1alpha2
+kind: TCPRoute
+metadata:
+  name: stalwart-pop3
+  namespace: stalwart
+spec:
+  parentRefs:
+    - name: envoy
+      namespace: envoy-gateway-system
+      sectionName: pop3
+  rules:
+    - backendRefs:
+        - name: stalwart-stalwart
+          port: 110
+---
+apiVersion: gateway.networking.k8s.io/v1alpha2
+kind: TCPRoute
+metadata:
+  name: stalwart-sieve
+  namespace: stalwart
+spec:
+  parentRefs:
+    - name: envoy
+      namespace: envoy-gateway-system
+      sectionName: sieve
+  rules:
+    - backendRefs:
+        - name: stalwart-stalwart
+          port: 4190
+---
+apiVersion: gateway.networking.k8s.io/v1alpha2
+kind: TLSRoute
+metadata:
+  name: stalwart-smtps
+  namespace: stalwart
+spec:
+  parentRefs:
+    - name: envoy
+      namespace: envoy-gateway-system
+      sectionName: smtps
+  hostnames:
+    - {{ include "stalwart.domain" . | quote }}
+  rules:
+    - backendRefs:
+        - name: stalwart-stalwart
+          port: 465
+---
+apiVersion: gateway.networking.k8s.io/v1alpha2
+kind: TLSRoute
+metadata:
+  name: stalwart-imaps
+  namespace: stalwart
+spec:
+  parentRefs:
+    - name: envoy
+      namespace: envoy-gateway-system
+      sectionName: imaps
+  hostnames:
+    - {{ include "stalwart.domain" . | quote }}
+  rules:
+    - backendRefs:
+        - name: stalwart-stalwart
+          port: 993
+---
+apiVersion: gateway.networking.k8s.io/v1alpha2
+kind: TLSRoute
+metadata:
+  name: stalwart-pop3s
+  namespace: stalwart
+spec:
+  parentRefs:
+    - name: envoy
+      namespace: envoy-gateway-system
+      sectionName: pop3s
+  hostnames:
+    - {{ include "stalwart.domain" . | quote }}
+  rules:
+    - backendRefs:
+        - name: stalwart-stalwart
+          port: 995

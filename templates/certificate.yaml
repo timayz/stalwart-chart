@@ -1,0 +1,19 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: stalwart
+  namespace: envoy-gateway-system
+spec:
+  dnsNames:
+    - {{ include "stalwart.domain" . | quote }}
+    - {{ .Values.domain | quote }}
+  secretName: stalwart-tls
+  issuerRef:
+    kind: ClusterIssuer
+    name: letsencrypt
+  secretTemplate:
+    annotations:
+      reflector.v1.k8s.emberstack.com/reflection-allowed: "true"
+      reflector.v1.k8s.emberstack.com/reflection-allowed-namespaces: "stalwart"
+      reflector.v1.k8s.emberstack.com/reflection-auto-enabled: "true"
+      reflector.v1.k8s.emberstack.com/reflection-auto-namespaces: "stalwart"
