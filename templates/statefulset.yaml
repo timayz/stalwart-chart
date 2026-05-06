@@ -117,6 +117,8 @@ spec:
   volumeClaimTemplates:
     - metadata:
         name: data
+        labels:
+          recurring-job-group.longhorn.io/critical: enabled
       spec:
         accessModes:
           - {{ .Values.persistence.accessMode | quote }}
